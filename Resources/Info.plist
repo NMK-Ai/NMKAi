@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- المفاتيح الأساسية للـ Bundle -->
+    <key>CFBundleDevelopmentRegion</key>
+    <string>ar</string>
+    <key>CFBundleDisplayName</key>
+    <string>NMK Ai</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key>
+    <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+    <key>CFBundleShortVersionString</key>
+    <string>$(MARKETING_VERSION)</string>
+    <key>CFBundleVersion</key>
+    <string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UIApplicationSupportsIndirectInputEvents</key>
+    <true/>
+    <key>UILaunchScreen</key>
+    <dict/>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+
+    <!--
+        استثناء App Transport Security (ATS)
+        مطلوب لأن التطبيق يتصل بجهاز القائد الآلي عبر HTTP (ليس HTTPS)
+        على الشبكة المحلية (http://ip:8082)
+    -->
+
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <!-- السماح بتحميل الموارد عبر HTTP على الشبكة المحلية -->
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+
+        <!-- السماح بأي اتصال HTTP (للشبكات الخاصة بأجهزة IP) -->
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+
+        <!-- استثناء محدد لعناوين IP المحلية -->
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>local</key>
+            <dict>
+                <key>NSIncludesDefaultDomains</key>
+                <true/>
+                <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+                <key>NSTemporaryExceptionMinimumTLSVersion</key>
+                <string>TLSv1.0</string>
+            </dict>
+        </dict>
+    </dict>
+
+    <!-- أذونات الشبكة المحلية (iOS 14+) -->
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>يحتاج القائد الآلي للوصول إلى الشبكة المحلية لاكتشاف جهازك والاتصال به.</string>
+
+    <!-- اكتشاف الأجهزة المحلية (Bonjour/mDNS) -->
+    <key>NSBonjourServices</key>
+    <array>
+        <string>_http._tcp</string>
+        <string>_nmk._tcp</string>
+    </array>
+
+    <!-- أذونات إضافية -->
+    <key>NSCameraUsageDescription</key>
+    <string>يستخدم القائد الآلي الكاميرا لعرض بث كاميرا السائق ومراقبة الانتباه.</string>
+
+    <key>NSMicrophoneUsageDescription</key>
+    <string>يستخدم القائد الآلي الميكروفون لتسجيل الصوت داخل المقصورة (اختياري).</string>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>يستخدم القائد الآلي الموقع لعرض مسار الرحلة على الخريطة.</string>
+
+    <!-- دعم الاتجاهات (أفقي/عمودي) -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+
+    <!-- إخفاء شريط الحالة أثناء استخدام الكاميرا -->
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <true/>
+</dict>
+</plist>

@@ -1,0 +1,505 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+/* Begin PBXFileReference section */
+		AA000001 /* NMKAiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMKAiApp.swift; sourceTree = "<group>"; };
+		AA000002 /* AlertSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSettings.swift; sourceTree = "<group>"; };
+		AA000003 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		AA000004 /* CarProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarProfile.swift; sourceTree = "<group>"; };
+		AA000005 /* DrivingSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivingSettings.swift; sourceTree = "<group>"; };
+		AA000006 /* LiveViewSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewSettings.swift; sourceTree = "<group>"; };
+		AA000007 /* MapSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettings.swift; sourceTree = "<group>"; };
+		AA000008 /* OpenpilotToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenpilotToggle.swift; sourceTree = "<group>"; };
+		AA000009 /* DeviceConnectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceConnectionService.swift; sourceTree = "<group>"; };
+		AA00000A /* NMKTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMKTheme.swift; sourceTree = "<group>"; };
+		AA00000B /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		AA00000C /* NMKSelectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMKSelectionList.swift; sourceTree = "<group>"; };
+		AA00000D /* NMKToggleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMKToggleCard.swift; sourceTree = "<group>"; };
+		AA00000E /* CarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarsView.swift; sourceTree = "<group>"; };
+		AA00000F /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
+		AA000010 /* FeaturesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesView.swift; sourceTree = "<group>"; };
+		AA000011 /* InstallationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallationView.swift; sourceTree = "<group>"; };
+		AA000012 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
+		AA000013 /* SocialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialView.swift; sourceTree = "<group>"; };
+		AA000014 /* UserManualView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManualView.swift; sourceTree = "<group>"; };
+		AA000015 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
+		AA000016 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		AA000017 /* AlertSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSettingsView.swift; sourceTree = "<group>"; };
+		AA000018 /* CarProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarProfileView.swift; sourceTree = "<group>"; };
+		AA000019 /* DrivingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivingSettingsView.swift; sourceTree = "<group>"; };
+		AA00001A /* LiveViewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewSettingsView.swift; sourceTree = "<group>"; };
+		AA00001B /* MapSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsView.swift; sourceTree = "<group>"; };
+		AA00001C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA00001D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AA00001F /* NMKAi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NMKAi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		AA100000 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				AA100001 /* NMKAi */,
+				AA100010 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AA100010 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA00001F /* NMKAi.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AA100001 /* NMKAi */ = {
+			isa = PBXGroup;
+			children = (
+				AA100002 /* App */,
+				AA100003 /* Theme */,
+				AA100004 /* Models */,
+				AA100005 /* ViewModels */,
+				AA100006 /* Services */,
+				AA100007 /* Views */,
+				AA100008 /* Resources */,
+			);
+			sourceTree = "<group>";
+		};
+		AA100002 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001 /* NMKAiApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		AA100003 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000A /* NMKTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		AA100004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002 /* AlertSettings.swift */,
+				AA000003 /* AppSettings.swift */,
+				AA000004 /* CarProfile.swift */,
+				AA000005 /* DrivingSettings.swift */,
+				AA000006 /* LiveViewSettings.swift */,
+				AA000007 /* MapSettings.swift */,
+				AA000008 /* OpenpilotToggle.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AA100005 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000B /* SettingsStore.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		AA100006 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AA000009 /* DeviceConnectionService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		AA100007 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA100009_grp /* Components */,
+				AA10000A_grp /* Screens */,
+				AA10000B_grp /* Settings */,
+				AA10000C_grp /* Info */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AA100009_grp /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000C /* NMKSelectionList.swift */,
+				AA00000D /* NMKToggleCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		AA10000A_grp /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				AA000015 /* ControlView.swift */,
+				AA000016 /* MainTabView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		AA10000B_grp /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AA000017 /* AlertSettingsView.swift */,
+				AA000018 /* CarProfileView.swift */,
+				AA000019 /* DrivingSettingsView.swift */,
+				AA00001A /* LiveViewSettingsView.swift */,
+				AA00001B /* MapSettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		AA10000C_grp /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000E /* CarsView.swift */,
+				AA00000F /* ContactView.swift */,
+				AA000010 /* FeaturesView.swift */,
+				AA000011 /* InstallationView.swift */,
+				AA000012 /* PrivacyPolicyView.swift */,
+				AA000013 /* SocialView.swift */,
+				AA000014 /* UserManualView.swift */,
+			);
+			path = Info;
+			sourceTree = "<group>";
+		};
+		AA100008 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AA00001C /* Info.plist */,
+				AA00001D /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA200000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA300001 /* NMKAiApp.swift in Sources */,
+				AA300002 /* AlertSettings.swift in Sources */,
+				AA300003 /* AppSettings.swift in Sources */,
+				AA300004 /* CarProfile.swift in Sources */,
+				AA300005 /* DrivingSettings.swift in Sources */,
+				AA300006 /* LiveViewSettings.swift in Sources */,
+				AA300007 /* MapSettings.swift in Sources */,
+				AA300008 /* OpenpilotToggle.swift in Sources */,
+				AA300009 /* DeviceConnectionService.swift in Sources */,
+				AA30000A /* NMKTheme.swift in Sources */,
+				AA30000B /* SettingsStore.swift in Sources */,
+				AA30000C /* NMKSelectionList.swift in Sources */,
+				AA30000D /* NMKToggleCard.swift in Sources */,
+				AA30000E /* CarsView.swift in Sources */,
+				AA30000F /* ContactView.swift in Sources */,
+				AA300010 /* FeaturesView.swift in Sources */,
+				AA300011 /* InstallationView.swift in Sources */,
+				AA300012 /* PrivacyPolicyView.swift in Sources */,
+				AA300013 /* SocialView.swift in Sources */,
+				AA300014 /* UserManualView.swift in Sources */,
+				AA300015 /* ControlView.swift in Sources */,
+				AA300016 /* MainTabView.swift in Sources */,
+				AA300017 /* AlertSettingsView.swift in Sources */,
+				AA300018 /* CarProfileView.swift in Sources */,
+				AA300019 /* DrivingSettingsView.swift in Sources */,
+				AA30001A /* LiveViewSettingsView.swift in Sources */,
+				AA30001B /* MapSettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA200001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA30001D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA200002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXBuildFile section */
+		AA300001 /* NMKAiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001 /* NMKAiApp.swift */; };
+		AA300002 /* AlertSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002 /* AlertSettings.swift */; };
+		AA300003 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000003 /* AppSettings.swift */; };
+		AA300004 /* CarProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000004 /* CarProfile.swift */; };
+		AA300005 /* DrivingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000005 /* DrivingSettings.swift */; };
+		AA300006 /* LiveViewSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000006 /* LiveViewSettings.swift */; };
+		AA300007 /* MapSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000007 /* MapSettings.swift */; };
+		AA300008 /* OpenpilotToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000008 /* OpenpilotToggle.swift */; };
+		AA300009 /* DeviceConnectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000009 /* DeviceConnectionService.swift */; };
+		AA30000A /* NMKTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000A /* NMKTheme.swift */; };
+		AA30000B /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000B /* SettingsStore.swift */; };
+		AA30000C /* NMKSelectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000C /* NMKSelectionList.swift */; };
+		AA30000D /* NMKToggleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000D /* NMKToggleCard.swift */; };
+		AA30000E /* CarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000E /* CarsView.swift */; };
+		AA30000F /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000F /* ContactView.swift */; };
+		AA300010 /* FeaturesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000010 /* FeaturesView.swift */; };
+		AA300011 /* InstallationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000011 /* InstallationView.swift */; };
+		AA300012 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000012 /* PrivacyPolicyView.swift */; };
+		AA300013 /* SocialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000013 /* SocialView.swift */; };
+		AA300014 /* UserManualView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000014 /* UserManualView.swift */; };
+		AA300015 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000015 /* ControlView.swift */; };
+		AA300016 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000016 /* MainTabView.swift */; };
+		AA300017 /* AlertSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000017 /* AlertSettingsView.swift */; };
+		AA300018 /* CarProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000018 /* CarProfileView.swift */; };
+		AA300019 /* DrivingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000019 /* DrivingSettingsView.swift */; };
+		AA30001A /* LiveViewSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00001A /* LiveViewSettingsView.swift */; };
+		AA30001B /* MapSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00001B /* MapSettingsView.swift */; };
+		AA30001D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA00001D /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXNativeTarget section */
+		AA400000 /* NMKAi */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA500000 /* Build configuration list for NMKAi */;
+			buildPhases = (
+				AA200000 /* Sources */,
+				AA200002 /* Frameworks */,
+				AA200001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NMKAi;
+			productName = NMKAi;
+			productReference = AA00001F /* NMKAi.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AA600000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+			};
+			buildConfigurationList = AA500002 /* Build configuration list for PBXProject */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = ar;
+			hasScannedForEncodings = 0;
+			knownRegions = ("ar", Base);
+			mainGroup = AA100000 /* Root */;
+			productRefGroup = AA100010 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA400000 /* NMKAi */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCConfigurationList section */
+		AA500000 /* Build configuration list for NMKAi */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA500010 /* Debug */,
+				AA500011 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA500002 /* Build configuration list for PBXProject */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA500012 /* Debug */,
+				AA500013 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCBuildConfiguration section */
+		AA500010 /* Debug NMKAi */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "NMK Ai";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sa.nmk.NMKAi";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA500011 /* Release NMKAi */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "NMK Ai";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sa.nmk.NMKAi";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AA500012 /* Debug Project */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_PREDEFINED = "DEBUG=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AA500013 /* Release Project */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+	};
+	rootObject = AA600000 /* Project object */;
+}
