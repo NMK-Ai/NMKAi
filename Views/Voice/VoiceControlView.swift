@@ -2,421 +2,366 @@
 //  VoiceControlView.swift
 //  NMKAi — القائد الآلي
 //
-//  واجهة التحكم الصوتي بالمركبة
-//  Voice Control View for Vehicle Functions
+//  واجهة المساعد الصوتي للتحكم بالمركبة
+//  Voice Assistant View — Vehicle Control
 //
-//  Author: NMK-Ai (نويكل 🧬)
-//  Version: 0.1.0
+//  Author: NMK-Ai
 //
 
 import SwiftUI
 
-// MARK: - Voice Control View
-
 struct VoiceControlView: View {
     @EnvironmentObject var connection: DeviceConnectionService
-    
-    @State private var isListening = false
-    @State private var transcribedText = ""
-    @State private var lastResponse = ""
-    @State private var commandHistory: [VoiceCommandEntry] = []
-    @State private var showCommandList = false
-    @State private var isLoading = false
+    @State private var voiceService = VoiceAssistantService()
+    @State private var showCommandsList = false
+    @State private var hasPermission = false
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 24) {
-                    // MARK: - Voice Button
-                    voiceButtonSection
+                VStack(spacing: 20) {
+                    // زر الميكروفون
+                    micSection
                     
-                    // MARK: - Last Response
-                    if !lastResponse.isEmpty {
+                    // آخر رد
+                    if !voiceService.lastResponse.isEmpty {
                         responseCard
                     }
                     
-                    // MARK: - Quick Actions
+                    // الأوامر السريعة
                     quickActionsSection
                     
-                    // MARK: - Vehicle State
+                    // حالة المركبة
                     vehicleStateSection
                     
-                    // MARK: - Command History
-                    if !commandHistory.isEmpty {
+                    // سجل الأوامر
+                    if !voiceService.commandHistory.isEmpty {
                         historySection
                     }
                 }
                 .padding()
             }
-            .background(NMKTheme.background)
-            .navigationTitle("التحكم الصوتي")
+            .background(Color.nmkBackground)
+            .navigationTitle("المساعد الصوتي")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: { showCommandList = true }) {
+                    Button(action: { showCommandsList = true }) {
                         Image(systemName: "list.bullet.rectangle")
-                            .foregroundStyle(NMKTheme.primary)
+                            .foregroundStyle(.nmkPrimary)
                     }
                 }
             }
-            .sheet(isPresented: $showCommandList) {
+            .sheet(isPresented: $showCommandsList) {
                 VoiceCommandsListView()
             }
-            .task {
-                await fetchVehicleState()
+        }
+        .onAppear {
+            voiceService.deviceService = connection
+            voiceService.requestPermissions { granted in
+                hasPermission = granted
             }
         }
     }
     
-    // MARK: - Voice Button Section
+    // MARK: - الميكروفون
     
-    private var voiceButtonSection: some View {
+    private var micSection: some View {
         VStack(spacing: 16) {
-            Button(action: toggleListening) {
+            Button(action: { voiceService.toggleListening() }) {
                 ZStack {
-                    Circle()
-                        .fill(isListening ? NMKTheme.danger : NMKTheme.primary)
-                        .frame(width: 120, height: 120)
-                        .shadow(color: isListening ? NMKTheme.danger.opacity(0.4) : NMKTheme.primary.opacity(0.3), radius: 12)
-                    
-                    if isListening {
-                        // Animated rings
-                        ForEach(0..<3) { i in
+                    // حلقات متحركة عند الاستماع
+                    if voiceService.isListening {
+                        ForEach(0..<3, id: \.self) { i in
                             Circle()
-                                .stroke(NMKTheme.primary.opacity(0.3), lineWidth: 2)
+                                .stroke(Color.nmkPrimary.opacity(0.3), lineWidth: 2)
                                 .frame(width: 120 + CGFloat(i * 30), height: 120 + CGFloat(i * 30))
-                                .scaleEffect(isListening ? 1.2 : 1.0)
-                                .opacity(isListening ? 0 : 0.5)
+                                .scaleEffect(voiceService.isListening ? 1.3 : 1.0)
+                                .opacity(voiceService.isListening ? 0 : 0.5)
                                 .animation(
                                     .easeInOut(duration: 1.5)
                                         .repeatForever(autoreverses: false)
                                         .delay(Double(i) * 0.3),
-                                    value: isListening
+                                    value: voiceService.isListening
                                 )
                         }
                     }
                     
-                    Image(systemName: isListening ? "stop.fill" : "mic.fill")
-                        .font(.system(size: 44))
-                        .foregroundStyle(.white)
+                    Circle()
+                        .fill(voiceService.isListening ? Color.nmkDanger : Color.nmkPrimary)
+                        .frame(width: 120, height: 120)
+                        .shadow(
+                            color: voiceService.isListening
+                                ? Color.nmkDanger.opacity(0.4)
+                                : Color.nmkPrimary.opacity(0.3),
+                            radius: 12
+                        )
+                    
+                    if voiceService.isProcessing {
+                        ProgressView()
+                            .tint(.white)
+                            .scaleEffect(1.5)
+                    } else {
+                        Image(systemName: voiceService.isListening ? "stop.fill" : "mic.fill")
+                            .font(.system(size: 44))
+                            .foregroundStyle(.white)
+                    }
                 }
             }
-            .disabled(!connection.isConnected)
-            .opacity(connection.isConnected ? 1.0 : 0.5)
+            .disabled(!hasPermission && !connection.isDemoMode)
+            .opacity((hasPermission || connection.isDemoMode) ? 1.0 : 0.5)
             
-            Text(isListening ? "يستمع..." : "اضغط للتحدث")
-                .font(NMKTheme.title3)
-                .foregroundStyle(NMKTheme.textPrimary)
+            // الحالة
+            Text(statusText)
+                .font(NMKFont.headline())
+                .foregroundStyle(.nmkTextPrimary)
             
-            if !transcribedText.isEmpty {
-                Text("\"\(transcribedText)\"")
-                    .font(NMKTheme.body)
-                    .foregroundStyle(NMKTheme.textSecondary)
+            // النص المحول
+            if !voiceService.transcribedText.isEmpty {
+                Text("\"\(voiceService.transcribedText)\"")
+                    .font(NMKFont.subheadline())
+                    .foregroundStyle(.nmkTextSecondary)
                     .italic()
+                    .padding(.horizontal)
             }
             
-            if !connection.isConnected {
+            // تنبيه الصلاحيات
+            if !hasPermission && !connection.isDemoMode {
+                VStack(spacing: 8) {
+                    Image(systemName: "mic.slash.fill")
+                        .font(.title2)
+                        .foregroundStyle(.nmkWarning)
+                    Text("يحتاج التطبيق لإذن الميكروفون والتعرف على الكلام")
+                        .font(NMKFont.caption())
+                        .foregroundStyle(.nmkTextSecondary)
+                        .multilineTextAlignment(.center)
+                    Button("منح الصلاحيات") {
+                        voiceService.requestPermissions { granted in
+                            hasPermission = granted
+                        }
+                    }
+                    .foregroundStyle(.nmkPrimary)
+                    .font(NMKFont.subheadline())
+                }
+                .padding()
+            }
+            
+            if !connection.isConnected && !connection.isDemoMode {
                 Text("يجب الاتصال بجهاز القائد الآلي أولاً")
-                    .font(NMKTheme.caption)
-                    .foregroundStyle(NMKTheme.danger)
+                    .font(NMKFont.caption())
+                    .foregroundStyle(.nmkDanger)
             }
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 20)
     }
     
-    // MARK: - Response Card
+    private var statusText: String {
+        if voiceService.isProcessing { return "يعالج الأمر..." }
+        if voiceService.isListening { return "يستمع..." }
+        if !hasPermission && !connection.isDemoMode { return "اضغط لمنح الصلاحيات" }
+        return "اضغط للتحدث"
+    }
+    
+    // MARK: - الرد
     
     private var responseCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(NMKTheme.success)
+                Image(systemName: voiceService.commandHistory.first?.success == true
+                      ? "checkmark.circle.fill" : "xmark.circle.fill")
+                    .foregroundStyle(voiceService.commandHistory.first?.success == true
+                                     ? .nmkSuccess : .nmkDanger)
                 Text("النتيجة")
-                    .font(NMKTheme.title3)
-                    .foregroundStyle(NMKTheme.textPrimary)
+                    .font(NMKFont.headline())
+                    .foregroundStyle(.nmkTextPrimary)
             }
             
-            Text(lastResponse)
-                .font(NMKTheme.body)
-                .foregroundStyle(NMKTheme.textSecondary)
+            Text(voiceService.lastResponse)
+                .font(NMKFont.body())
+                .foregroundStyle(.nmkTextSecondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(16)
-        .background(NMKTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .background(Color.nmkCard)
+        .clipShape(RoundedRectangle(cornerRadius: NMKMetrics.cornerRadius))
     }
     
-    // MARK: - Quick Actions
+    // MARK: - الأوامر السريعة
     
     private var quickActionsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("أوامر سريعة")
-                .font(NMKTheme.title3)
-                .foregroundStyle(NMKTheme.textPrimary)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            NMKSectionHeader("أوامر سريعة")
             
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-            ], spacing: 12) {
-                quickActionButton(icon: "thermometer", title: "حرارة 22°", color: .orange) {
-                    sendCommand("SET_TEMPERATURE", params: ["value": 22])
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                voiceQuickButton(icon: "snowflake", title: "تشغيل المكيف", color: .cyan) {
+                    voiceService.processCommand("شغل المكيف")
                 }
-                quickActionButton(icon: "snowflake", title: "تشغيل المكيف", color: .cyan) {
-                    sendCommand("AC_ON")
+                voiceQuickButton(icon: "thermometer", title: "حرارة 22°", color: .orange) {
+                    voiceService.processCommand("اعتدل الحرارة لـ 22")
                 }
-                quickActionButton(icon: "window.casement", title: "فتح النوافذ", color: .blue) {
-                    sendCommand("WINDOW_OPEN")
+                voiceQuickButton(icon: "window.casement", title: "فتح النوافذ", color: .blue) {
+                    voiceService.processCommand("افتح النوافذ")
                 }
-                quickActionButton(icon: "lock.fill", title: "قفل الأبواب", color: .gray) {
-                    sendCommand("DOORS_LOCK")
+                voiceQuickButton(icon: "window.casement.closed", title: "إغلاق النوافذ", color: .indigo) {
+                    voiceService.processCommand("أغلق النوافذ")
                 }
-                quickActionButton(icon: "flame", title: "تدفئة المقعد", color: .red) {
-                    sendCommand("SEAT_HEAT_ON")
+                voiceQuickButton(icon: "lock.fill", title: "قفل الأبواب", color: .gray) {
+                    voiceService.processCommand("أقفل الأبواب")
                 }
-                quickActionButton(icon: "car.window.right", title: "إزالة الضباب", color: .teal) {
-                    sendCommand("DEFROST_ON")
+                voiceQuickButton(icon: "lock.open.fill", title: "فتح الأبواب", color: .teal) {
+                    voiceService.processCommand("افتح الأبواب")
+                }
+                voiceQuickButton(icon: "flame", title: "تدفئة المقعد", color: .red) {
+                    voiceService.processCommand("شغل تدفية المقعد")
+                }
+                voiceQuickButton(icon: "cloud.sleet", title: "إزالة الضباب", color: .mint) {
+                    voiceService.processCommand("شغل ازالة الضباب")
+                }
+                voiceQuickButton(icon: "light.beacon.max", title: "الأضواء", color: .yellow) {
+                    voiceService.processCommand("شغل الأضواء")
+                }
+                voiceQuickButton(icon: "car.lane.rear.right", title: "القيادة الذاتية", color: .nmkPrimary) {
+                    voiceService.processCommand("فعّل القيادة الذاتية")
                 }
             }
         }
     }
     
-    private func quickActionButton(icon: String, title: String, color: Color, action: @escaping () -> Void) -> some View {
+    private func voiceQuickButton(icon: String, title: String, color: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             VStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.title2)
                     .foregroundStyle(color)
                 Text(title)
-                    .font(NMKTheme.caption)
-                    .foregroundStyle(NMKTheme.textPrimary)
+                    .font(NMKFont.caption())
+                    .foregroundStyle(.nmkTextPrimary)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(NMKTheme.cardBackground)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .background(Color.nmkCard)
+            .clipShape(RoundedRectangle(cornerRadius: NMKMetrics.cornerRadius))
         }
-        .disabled(!connection.isConnected || isLoading)
+        .buttonStyle(.plain)
+        .disabled(voiceService.isProcessing)
+        .opacity(voiceService.isProcessing ? 0.5 : 1.0)
     }
     
-    // MARK: - Vehicle State
-    
-    @State private var vehicleState: VehicleState?
+    // MARK: - حالة المركبة
     
     private var vehicleStateSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("حالة المركبة")
-                .font(NMKTheme.title3)
-                .foregroundStyle(NMKTheme.textPrimary)
+            NMKSectionHeader("حالة المركبة")
             
-            if let state = vehicleState {
-                VStack(spacing: 8) {
-                    stateRow(label: "السرعة", value: "\(Int(state.speedKmh)) كم/س", icon: "speedometer")
-                    stateRow(label: "الحرارة الخارجية", value: "\(Int(state.outsideTemp))°", icon: "thermometer.sun")
-                    stateRow(label: "نسبة الوقود", value: "\(Int(state.fuelPercent))%", icon: "fuelpump")
-                    stateRow(label: "الأبواب", value: state.doorsLocked ? "مقفولة" : "مفتوحة", icon: "lock")
-                    stateRow(label: "النوافذ", value: state.windowsClosed ? "مغلقة" : "مفتوحة", icon: "window.casement")
-                }
-            } else {
-                Text("جاري التحميل...")
-                    .font(NMKTheme.body)
-                    .foregroundStyle(NMKTheme.textSecondary)
+            VStack(spacing: 8) {
+                stateRow(label: "الحرارة الخارجية", value: "35°", icon: "thermometer.sun")
+                stateRow(label: "نسبة الوقود", value: "75%", icon: "fuelpump")
+                stateRow(label: "الأبواب", value: "مقفولة", icon: "lock.fill")
+                stateRow(label: "النوافذ", value: "مغلقة", icon: "window.casement.closed")
+                stateRow(label: "المكيف", value: "مطفأ", icon: "snowflake.slash")
             }
         }
         .padding(16)
-        .background(NMKTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .background(Color.nmkCard)
+        .clipShape(RoundedRectangle(cornerRadius: NMKMetrics.cornerRadius))
     }
     
     private func stateRow(label: String, value: String, icon: String) -> some View {
         HStack {
             Image(systemName: icon)
-                .foregroundStyle(NMKTheme.primary)
+                .foregroundStyle(.nmkPrimary)
                 .frame(width: 24)
             Text(label)
-                .font(NMKTheme.body)
-                .foregroundStyle(NMKTheme.textSecondary)
+                .font(NMKFont.body())
+                .foregroundStyle(.nmkTextSecondary)
             Spacer()
             Text(value)
-                .font(NMKTheme.bodyBold)
-                .foregroundStyle(NMKTheme.textPrimary)
+                .font(NMKFont.headline())
+                .foregroundStyle(.nmkTextPrimary)
         }
     }
     
-    // MARK: - History
+    // MARK: - السجل
     
     private var historySection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("آخر الأوامر")
-                .font(NMKTheme.title3)
-                .foregroundStyle(NMKTheme.textPrimary)
+            NMKSectionHeader("آخر الأوامر")
             
-            ForEach(commandHistory.prefix(5)) { entry in
-                HStack {
+            ForEach(voiceService.commandHistory.prefix(5)) { entry in
+                HStack(spacing: 10) {
                     Image(systemName: entry.success ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundStyle(entry.success ? NMKTheme.success : NMKTheme.danger)
-                    Text(entry.command)
-                        .font(NMKTheme.body)
-                        .foregroundStyle(NMKTheme.textPrimary)
+                        .foregroundStyle(entry.success ? .nmkSuccess : .nmkDanger)
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(entry.command)
+                            .font(NMKFont.body())
+                            .foregroundStyle(.nmkTextPrimary)
+                        Text(entry.feedback)
+                            .font(NMKFont.caption())
+                            .foregroundStyle(.nmkTextSecondary)
+                    }
+                    
                     Spacer()
+                    
                     Text(entry.timestamp, style: .relative)
-                        .font(NMKTheme.caption)
-                        .foregroundStyle(NMKTheme.textSecondary)
+                        .font(NMKFont.caption())
+                        .foregroundStyle(.nmkTextTertiary)
                 }
-                .padding(.vertical, 4)
+                .padding(.vertical, 6)
             }
         }
         .padding(16)
-        .background(NMKTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-    }
-    
-    // MARK: - Actions
-    
-    private func toggleListening() {
-        if isListening {
-            isListening = false
-            if !transcribedText.isEmpty {
-                sendCommand("TEXT", params: ["text": transcribedText])
-            }
-        } else {
-            isListening = true
-            transcribedText = ""
-            // In production: start Speech Recognition here
-            // For now: simulate
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                if isListening {
-                    isListening = false
-                    transcribedText = "اعتدل الحرارة لـ 22"
-                }
-            }
-        }
-    }
-    
-    private func sendCommand(_ intent: String, params: [String: Any] = [:]) {
-        guard connection.isConnected else { return }
-        
-        isLoading = true
-        
-        // Build URL
-        let urlString = "\(connection.baseURL)/api/voice/command"
-        guard let url = URL(string: urlString) else { return }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let body: [String: Any] = [
-            "intent": intent,
-            "params": params,
-            "language": "ar",
-            "source": "nmkai_ios"
-        ]
-        
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-        
-        URLSession.shared.dataTask(with: request) { data, _, _ in
-            DispatchQueue.main.async {
-                isLoading = false
-                
-                if let data = data,
-                   let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                    let success = json["success"] as? Bool ?? false
-                    let feedback = json["feedback"] as? String ?? (success ? "تم" : "فشل")
-                    
-                    lastResponse = feedback
-                    commandHistory.insert(VoiceCommandEntry(
-                        command: intent,
-                        success: success,
-                        timestamp: Date()
-                    ), at: 0)
-                } else {
-                    lastResponse = "تعذر الاتصال بالجهاز"
-                }
-            }
-        }.resume()
-    }
-    
-    private func fetchVehicleState() async {
-        guard connection.isConnected else { return }
-        
-        let urlString = "\(connection.baseURL)/api/vehicle/state"
-        guard let url = URL(string: urlString) else { return }
-        
-        URLSession.shared.dataTask(with: url) { data, _, _ in
-            if let data = data,
-               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                DispatchQueue.main.async {
-                    vehicleState = VehicleState(
-                        speedKmh: json["speed_kmh"] as? Double ?? 0,
-                        outsideTemp: json["outside_temp"] as? Double ?? 0,
-                        fuelPercent: json["fuel_percent"] as? Double ?? 0,
-                        doorsLocked: json["doors_locked"] as? Bool ?? true,
-                        windowsClosed: json["windows_closed"] as? Bool ?? true
-                    )
-                }
-            }
-        }.resume()
+        .background(Color.nmkCard)
+        .clipShape(RoundedRectangle(cornerRadius: NMKMetrics.cornerRadius))
     }
 }
 
-// MARK: - Data Models
-
-struct VehicleState {
-    let speedKmh: Double
-    let outsideTemp: Double
-    let fuelPercent: Double
-    let doorsLocked: Bool
-    let windowsClosed: Bool
-}
-
-struct VoiceCommandEntry: Identifiable {
-    let id = UUID()
-    let command: String
-    let success: Bool
-    let timestamp: Date
-}
-
-// MARK: - Commands List View
+// MARK: - قائمة الأوامر
 
 struct VoiceCommandsListView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("التكييف") {
-                    commandRow(ar: "اعتدل الحرارة لـ 22", en: "set temperature to 22")
-                    commandRow(ar: "شغل المكيف", en: "turn on AC")
-                    commandRow(ar: "طفي المكيف", en: "turn off AC")
-                    commandRow(ar: "زد سرعة المروحة", en: "increase fan")
-                    commandRow(ar: "شغل تدفية المقعد", en: "turn on seat heater")
-                    commandRow(ar: "إزالة الضباب", en: "defrost")
+                Section("التكييف — HVAC") {
+                    cmdRow(ar: "اعتدل الحرارة لـ 22", en: "set temperature to 22", icon: "thermometer")
+                    cmdRow(ar: "شغل المكيف", en: "turn on AC", icon: "snowflake")
+                    cmdRow(ar: "طفي المكيف", en: "turn off AC", icon: "snowflake.slash")
+                    cmdRow(ar: "زد سرعة المروحة", en: "increase fan speed", icon: "wind")
+                    cmdRow(ar: "شغل تدفية المقعد", en: "turn on seat heater", icon: "flame")
+                    cmdRow(ar: "شغل ازالة الضباب", en: "turn on defrost", icon: "cloud.sleet")
                 }
                 
-                Section("النوافذ والأبواب") {
-                    commandRow(ar: "افتح النوافذ", en: "open windows")
-                    commandRow(ar: "أغلق النوافذ", en: "close windows")
-                    commandRow(ar: "أقفل الأبواب", en: "lock doors")
-                    commandRow(ar: "افتح الأبواب", en: "unlock doors")
+                Section("النوافذ — Windows") {
+                    cmdRow(ar: "افتح النوافذ", en: "open windows", icon: "window.casement")
+                    cmdRow(ar: "أغلق النوافذ", en: "close windows", icon: "window.casement.closed")
                 }
                 
-                Section("الإضاءة والمرايا") {
-                    commandRow(ar: "شغل الأنوار الداخلية", en: "turn on interior lights")
-                    commandRow(ar: "شغل الأضواء", en: "turn on headlights")
-                    commandRow(ar: "اطوي المرايا", en: "fold mirrors")
+                Section("الأبواب — Doors") {
+                    cmdRow(ar: "أقفل الأبواب", en: "lock doors", icon: "lock.fill")
+                    cmdRow(ar: "افتح الأبواب", en: "unlock doors", icon: "lock.open.fill")
+                    cmdRow(ar: "افتح الصندوق", en: "open trunk", icon: "shippingbox")
                 }
                 
-                Section("القيادة الذاتية") {
-                    commandRow(ar: "فعّل القيادة الذاتية", en: "enable autopilot")
-                    commandRow(ar: "أوقف القيادة الذاتية", en: "disable autopilot")
-                    commandRow(ar: "اضبط السرعة على 120", en: "set speed to 120")
+                Section("الإضاءة — Lights") {
+                    cmdRow(ar: "شغل الأضواء", en: "turn on headlights", icon: "light.beacon.max")
+                    cmdRow(ar: "طفي الأضواء", en: "turn off headlights", icon: "light.beacon")
+                    cmdRow(ar: "شغل الأنوار الداخلية", en: "interior lights on", icon: "house.fill")
                 }
                 
-                Section("استعلامات") {
-                    commandRow(ar: "كم الحرارة خارج", en: "what's the temperature")
-                    commandRow(ar: "كم البنزين الباقي", en: "how much fuel left")
-                    commandRow(ar: "كم سرعتي", en: "what's my speed")
-                    commandRow(ar: "كم ضغط الإطارات", en: "tire pressure")
+                Section("المرايا — Mirrors") {
+                    cmdRow(ar: "اطوي المرايا", en: "fold mirrors", icon: "rectangle.split.2x1")
+                }
+                
+                Section("القيادة الذاتية — ADAS") {
+                    cmdRow(ar: "فعّل القيادة الذاتية", en: "enable autopilot", icon: "car.lane.rear.right")
+                    cmdRow(ar: "أوقف القيادة الذاتية", en: "disable autopilot", icon: "hand.raised")
+                }
+                
+                Section("استعلامات — Info") {
+                    cmdRow(ar: "كم الحرارة خارج", en: "what's the temperature", icon: "thermometer.sun")
+                    cmdRow(ar: "كم البنزين الباقي", en: "how much fuel left", icon: "fuelpump")
+                    cmdRow(ar: "كم سرعتي", en: "what's my speed", icon: "speedometer")
                 }
             }
             .navigationTitle("قائمة الأوامر")
@@ -424,14 +369,19 @@ struct VoiceCommandsListView: View {
         }
     }
     
-    private func commandRow(ar: String, en: String) -> some View {
-        VStack(alignment: .leading) {
-            Text(ar)
-                .font(.body)
-                .foregroundStyle(.primary)
-            Text(en)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+    private func cmdRow(ar: String, en: String, icon: String) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .foregroundStyle(.nmkPrimary)
+                .frame(width: 28)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(ar)
+                    .font(NMKFont.body())
+                    .foregroundStyle(.nmkTextPrimary)
+                Text(en)
+                    .font(NMKFont.caption())
+                    .foregroundStyle(.nmkTextSecondary)
+            }
         }
         .padding(.vertical, 2)
     }
