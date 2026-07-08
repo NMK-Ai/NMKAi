@@ -28,30 +28,35 @@ struct MainTabView: View {
                 .tabItem { Label("التحكم", systemImage: "slider.horizontal.3") }
                 .tag(1)
 
-            // 3. السيارات المدعومة
-            CarsView()
-                .tabItem { Label("السيارات", systemImage: "car.fill") }
+            // 3. المساعد الصوتي
+            VoiceControlView()
+                .tabItem { Label("المساعد", systemImage: "mic.fill") }
                 .tag(2)
 
-            // 4. المزايا
-            FeaturesView()
-                .tabItem { Label("المزايا", systemImage: "sparkles") }
+            // 4. السيارات المدعومة
+            CarsView()
+                .tabItem { Label("السيارات", systemImage: "car.fill") }
                 .tag(3)
 
-            // 5. التركيب
-            InstallationView()
-                .tabItem { Label("التركيب", systemImage: "wrench.and.screwdriver.fill") }
+            // 5. المزايا
+            FeaturesView()
+                .tabItem { Label("المزايا", systemImage: "sparkles") }
                 .tag(4)
 
-            // 6. التعليمات
-            UserManualView()
-                .tabItem { Label("التعليمات", systemImage: "book.fill") }
+            // 6. التركيب
+            InstallationView()
+                .tabItem { Label("التركيب", systemImage: "wrench.and.screwdriver.fill") }
                 .tag(5)
 
-            // 7. التواصل
+            // 7. التعليمات
+            UserManualView()
+                .tabItem { Label("التعليمات", systemImage: "book.fill") }
+                .tag(6)
+
+            // 8. التواصل
             ContactView()
                 .tabItem { Label("التواصل", systemImage: "message.fill") }
-                .tag(6)
+                .tag(7)
         }
         .tint(.nmkPrimary)
         .environment(\.layoutDirection, .rightToLeft)
